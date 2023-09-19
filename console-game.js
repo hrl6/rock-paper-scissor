@@ -1,92 +1,69 @@
-function getComputerChoice (){
-    const randomPick = Math.random();
-    let pick;
-
-    if (randomPick < 0.3){
-        pick = "Rock";
-    }
-    else if (randomPick < 0.6){
-        pick = "Paper";
-    }
-    else {
-        pick = "Scissor";
-    }
-
-    return pick;
+function botRandomPick(){
+    const botChoices = ["Rock", "Paper", "Scissor"]; 
+    return botChoices[Math.floor(Math.random() * botChoices.length)];
 }
 
-function playRound (playerSelection, computerSelection){
-    playerSelection = playerSelection.toLowerCase();
-    computerSelection = computerSelection.toLowerCase();
-    
-    let playResult;
+let playerPoint = 0;
+let botPoint = 0;
 
-    if (playerSelection === "rock" && computerSelection === "scissor"){
-        playResult = "You Win! Rock beats Scissor.";
-    } else if (playerSelection === "rock" && computerSelection === "rock"){
-        playResult = "Draw!";
-    } else if (playerSelection === "rock" && computerSelection === "paper"){
-        playResult = "You Lose! Paper beats Rock.";
+const pointDiv = document.getElementById('point');
+const result = document.getElementById('result');
+
+function updatePoint(){
+    const pointDisplay  = `Player point - ${playerPoint} | Bot point - ${botPoint}`;
+    pointDiv.textContent = pointDisplay;
+
+    if (playerPoint === 5){
+        result.textContent = "VICTORY";
+        disableButtons();
+    } else if (botPoint === 5){
+        result.textContent = "DEFEAT";
+        disableButtons();
     }
+};
 
-    else if (playerSelection === "paper" && computerSelection === "rock"){
-        playResult = "You Win! Paper beats Rock.";
-    } else if (playerSelection === "paper" && computerSelection === "paper"){
-        playResult = "Draw!";
-    } else if (playerSelection === "paper" && computerSelection === "scissor"){
-        playResult = "You Lose! Scissor beats Paper.";
+function playRound(playerSelection, botSelection){
+    if (playerSelection === botSelection){
+        return "It\'s a DRAW!";
+    } else if (
+        (playerSelection === "Rock" && botSelection === "Scissor") ||
+        (playerSelection === "Paper" && botSelection === "Rock") ||
+        (playerSelection === "Scissor" && botSelection === "Paper")
+    ){
+        playerPoint++;
+        return `You WIN! ${playerSelection} beats ${botSelection}`;
+    } else {
+        botPoint++;
+        return `You LOSE! ${botSelection} beats ${playerSelection}`;
     }
-    
-    else if (playerSelection === "scissor" && computerSelection === "paper"){
-        playResult = "You Win! Scissor beats Paper.";
-    } else if (playerSelection === "scissor" && computerSelection === "scissor"){
-        playResult = "Draw!";
-    } else if (playerSelection === "scissor" && computerSelection === "rock"){
-        playResult = "You Lose! Rock beats Scissor.";
-    }
+};
 
-    else {
-        playResult = "Pick is not available";
-    }
+const rockButton = document.getElementById("rock");
+rockButton.addEventListener('click', () => {
+    botSelection = botRandomPick();
+    const roundResult = playRound("Rock", botSelection);
+    result.textContent = roundResult;
+    updatePoint();
+});
 
-    return playResult;
-}
+const paperButton = document.getElementById("paper");
+paperButton.addEventListener('click', () => {
+    botSelection = botRandomPick();
+    const roundResult = playRound("Paper", botSelection);
+    result.textContent = roundResult;
+    updatePoint();
+});
 
-function game (){
-    let roundWinner = 0;
-    let roundLoser = 0;
-    let gameResult;
-    
-    while (true){
-        const playerSelection = prompt("Your choice?");
-        const computerSelection = getComputerChoice();
+const scissorButton = document.getElementById("scissor");
+scissorButton.addEventListener('click', () => {
+    botSelection = botRandomPick();
+    const roundResult = playRound("Scissor", botSelection);
+    result.textContent = roundResult;
+    updatePoint();
+});
 
-        console.log(computerSelection);
-
-        let roundResult = playRound(playerSelection, computerSelection);
-        
-        if (roundResult.includes("You Win!")){
-            roundWinner++;
-            console.log(roundWinner + " Win");
-            console.log(playRound(playerSelection, computerSelection));
-        } else if (roundResult.includes("You Lose!")){
-            roundLoser++;
-            console.log(roundLoser + " Lose");
-            console.log(playRound(playerSelection, computerSelection));
-        } else {
-            console.log(playRound(playerSelection, computerSelection));
-        }
-        
-        if (roundWinner === 3){
-            gameResult = "VICTORY!";
-            break;
-        } else if (roundLoser === 3){
-            gameResult = "DEFEAT! Bot Win.";
-            break;
-        }
-    }
-
-    console.log(gameResult);
-}
-
-game();
+function disableButtons(){
+    rockButton.disabled = true;
+    paperButton.disabled = true;
+    scissorButton.disabled = true;
+};
