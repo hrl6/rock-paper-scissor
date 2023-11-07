@@ -1,2 +1,4 @@
 # rock-paper-scissor
-a game between you and bot.
+- rps in js.
+
+View: https://hrulm.github.io/rock-paper-scissor/

@@ -10,7 +10,7 @@ const pointDiv = document.getElementById('point');
 const result = document.getElementById('result');
 
 function updatePoint(){
-    const pointDisplay  = `Player point - ${playerPoint} | Bot point - ${botPoint}`;
+    const pointDisplay  = `Player point : ${playerPoint} || Bot point : ${botPoint}`;
     pointDiv.textContent = pointDisplay;
 
     if (playerPoint === 5){
